@@ -209,6 +209,34 @@ body {
 /* Estilos responsivos para dispositivos móviles */
 @media (max-width: 768px) {
     body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tree-container {
+        width: 50%;
+        height: auto;
+        margin-bottom: 1rem;
+    }
+
+    .dedication-text {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        transform: none;
+        max-width: 90%;
+        width: auto;
+        font-size: 1rem;
+        padding: 0.5em 1em;
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    body {
         font-size: 14px;
     }
 
