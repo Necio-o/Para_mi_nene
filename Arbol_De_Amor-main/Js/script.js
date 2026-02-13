@@ -118,19 +118,19 @@ function startFloatingObjects() {
   let count = 0;
   function spawn() {
     let el = document.createElement('div');
-    el.className = 'falling-petal';
+    el.className = 'floating-petal';
     // Posición inicial
     el.style.left = `${Math.random() * 90 + 2}%`;
-    el.style.top = `-${Math.random() * 10 + 5}%`;
+    el.style.top = `${100 + Math.random() * 10}%`;
     el.style.opacity = 0.7 + Math.random() * 0.3;
     container.appendChild(el);
 
-    // Animación de caída
+    // Animación flotante
     const duration = 6000 + Math.random() * 4000;
     const drift = (Math.random() - 0.5) * 60;
     setTimeout(() => {
       el.style.transition = `transform ${duration}ms linear, opacity 1.2s`;
-      el.style.transform = `translate(${drift}px, 110vh) scale(${0.8 + Math.random() * 0.6}) rotate(${Math.random() * 360}deg)`;
+      el.style.transform = `translate(${drift}px, -110vh) scale(${0.8 + Math.random() * 0.6}) rotate(${Math.random() * 360}deg)`;
       el.style.opacity = 0.2;
     }, 30);
 
@@ -165,7 +165,8 @@ function showCountdown() {
     let eventSeconds = Math.max(0, Math.floor((eventDiff / 1000) % 60));
 
     container.innerHTML =
-      `Llevamos juntos: <b>${days}</b> días`;
+      `Llevamos juntos: <b>${days}</b> días<br>` +
+      `Nuestro aniversario: <b>${eventDays}d ${eventHours}h ${eventMinutes}m ${eventSeconds}s</b>`;
     container.classList.add('visible');
   }
   update();
@@ -177,38 +178,76 @@ function playBackgroundMusic() {
   const audio = document.getElementById('bg-music');
   if (!audio) return;
 
-  // Configurar el volumen y el bucle
+  // --- Opción archivo local por parámetro 'musica' ---
+  let musicaParam = getURLParam('musica');
+  if (musicaParam) {
+    // Decodifica y previene rutas maliciosas
+    musicaParam = decodeURIComponent(musicaParam).replace(/[^\w\d .\-]/g, '');
+    audio.src = 'Music/' + musicaParam;
+  }
+
+  // --- Opción YouTube (solo mensaje de ayuda) ---
+  let youtubeParam = getURLParam('youtube');
+  if (youtubeParam) {
+    // Muestra mensaje de ayuda para descargar el audio
+    let helpMsg = document.getElementById('yt-help-msg');
+    if (!helpMsg) {
+      helpMsg = document.createElement('div');
+      helpMsg.id = 'yt-help-msg';
+      helpMsg.style.position = 'fixed';
+      helpMsg.style.right = '18px';
+      helpMsg.style.bottom = '180px';
+      helpMsg.style.background = 'rgba(255,255,255,0.95)';
+      helpMsg.style.color = '#e60026';
+      helpMsg.style.padding = '10px 16px';
+      helpMsg.style.borderRadius = '12px';
+      helpMsg.style.boxShadow = '0 2px 8px #e6002633';
+      helpMsg.style.fontSize = '1.05em';
+      helpMsg.style.zIndex = 100;
+      helpMsg.innerHTML = 'Para usar música de YouTube, descarga el audio (por ejemplo, usando y2mate, 4K Video Downloader, etc.), colócalo en la carpeta <b>Music</b> y usa la URL así:<br><br><code>?musica=nombre.mp3</code>';
+      document.body.appendChild(helpMsg);
+      setTimeout(() => { if(helpMsg) helpMsg.remove(); }, 15000);
+    }
+  }
+
+  let btn = document.getElementById('music-btn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'music-btn';
+    btn.textContent = '🔊 Música';
+    btn.style.position = 'fixed';
+    btn.style.bottom = '18px';
+    btn.style.right = '18px';
+    btn.style.zIndex = 99;
+    btn.style.background = 'rgba(255,255,255,0.85)';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '24px';
+    btn.style.padding = '10px 18px';
+    btn.style.fontSize = '1.1em';
+    btn.style.cursor = 'pointer';
+    document.body.appendChild(btn);
+  }
   audio.volume = 0.7;
   audio.loop = true;
-
-  // Intentar reproducir automáticamente
-  const tryPlay = () => {
-    audio.play().then(() => {
-      console.log('Música de fondo reproducida automáticamente.');
-    }).catch((error) => {
-      console.warn('El navegador bloqueó la reproducción automática:', error);
-    });
-  };
-
   // Intentar reproducir inmediatamente
-  tryPlay();
-
-  // Intentar reproducir nuevamente al detectar interacción del usuario
-  document.addEventListener('click', tryPlay, { once: true });
-  document.addEventListener('touchstart', tryPlay, { once: true });
-
-  // Forzar reproducción al cambiar visibilidad de la página
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      tryPlay();
-    }
+  audio.play().then(() => {
+    btn.textContent = '🔊 Música';
+  }).catch(() => {
+    // Si falla el autoplay, esperar click en el botón
+    btn.textContent = '▶️ Música';
   });
-
-  // Intentar reproducir al cargar la página
-  window.addEventListener('load', tryPlay);
+  btn.onclick = () => {
+    if (audio.paused) {
+      audio.play();
+      btn.textContent = '🔊 Música';
+    } else {
+      audio.pause();
+      btn.textContent = '🔈 Música';
+    }
+  };
 }
 
-// Intentar reproducir la música al cargar la página
+// Intentar reproducir la música lo antes posible (al cargar la página)
 window.addEventListener('DOMContentLoaded', () => {
   playBackgroundMusic();
 });
