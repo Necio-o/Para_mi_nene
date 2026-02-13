@@ -225,21 +225,15 @@ body {
     }
 
     .dedication-text {
-        font-size: 1rem;
-        padding: 0.5em 1em;
-        max-width: 90%;
-        top: 70%;
-        position: relative;
-        animation: moveTextDown 3s ease-in-out forwards;
+        position: absolute;
+        top: auto;
+        bottom: 10%;
+        transform: translateY(0);
+        animation: none; /* Eliminar animación previa */
     }
 
-    @keyframes moveTextDown {
-        0% {
-            top: 8%;
-        }
-        100% {
-            top: 70%;
-        }
+    .tree-container {
+        top: 30%;
     }
 
     #music-btn {
