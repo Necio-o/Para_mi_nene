@@ -191,7 +191,7 @@ body {
   .main-content {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center; /* centrar verticalmente */
     justify-content: center;
     gap: 2.5rem;
     padding: 2rem 4rem;
@@ -208,9 +208,20 @@ body {
 
   .tree-container {
     width: 40%;
-    align-self: flex-start;
-    /* Mover el árbol un poco hacia arriba en vista de escritorio */
-    margin-top: -4vh;
+    align-self: center;
+    /* Subir el árbol en vista de escritorio */
+    transform: translateY(-6vh);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  /* Asegurar que el SVG mantenga proporciones y no quede demasiado grande */
+  .tree-container svg {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    display: block;
   }
 }
 
