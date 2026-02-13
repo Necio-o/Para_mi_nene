@@ -229,6 +229,17 @@ body {
         padding: 0.5em 1em;
         max-width: 90%;
         top: 70%;
+        position: relative;
+        animation: moveTextDown 3s ease-in-out forwards;
+    }
+
+    @keyframes moveTextDown {
+        0% {
+            top: 8%;
+        }
+        100% {
+            top: 70%;
+        }
     }
 
     #music-btn {
