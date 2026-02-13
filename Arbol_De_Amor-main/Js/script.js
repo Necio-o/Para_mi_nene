@@ -196,6 +196,16 @@ function playBackgroundMusic() {
   // Intentar reproducir nuevamente al detectar interacción del usuario
   document.addEventListener('click', tryPlay, { once: true });
   document.addEventListener('touchstart', tryPlay, { once: true });
+
+  // Forzar reproducción al cambiar visibilidad de la página
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      tryPlay();
+    }
+  });
+
+  // Intentar reproducir al cargar la página
+  window.addEventListener('load', tryPlay);
 }
 
 // Intentar reproducir la música al cargar la página
