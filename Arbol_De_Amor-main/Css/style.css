@@ -185,3 +185,58 @@ body {
     font-size: 1.3rem;
   }
 }
+
+/* Desktop-first adjustments: when viewport is wide, ensure side-by-side layout and raise the tree slightly */
+@media (min-width: 900px) {
+  .main-content {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 2rem 4rem;
+    box-sizing: border-box;
+    height: 100vh;
+  }
+
+  .dedication-text {
+    width: 40%;
+    max-width: 640px;
+    margin: 0;
+    align-self: center;
+  }
+
+  .tree-container {
+    width: 40%;
+    align-self: flex-start;
+    /* Mover el árbol un poco hacia arriba en vista de escritorio */
+    margin-top: -4vh;
+  }
+}
+
+/* Mobile: stack vertically and keep tree below the text */
+@media (max-width: 899px) {
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    height: auto;
+  }
+
+  .dedication-text {
+    width: 95%;
+    max-width: none;
+    order: 0;
+  }
+
+  .tree-container {
+    width: 90%;
+    height: auto;
+    order: 1;
+    margin-top: 0;
+  }
+}
